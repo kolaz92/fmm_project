@@ -16,6 +16,11 @@ from easygoogletranslate import EasyGoogleTranslate
 
 # distmodel = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-v3', token='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')
 
+st.set_page_config(
+    page_title='Предсказание'
+    #layout="wide"
+)
+
 @st.cache_resource
 def import_modules():
     rb_tokenizer = AutoTokenizer.from_pretrained("cointegrated/rubert-tiny2")
@@ -37,11 +42,6 @@ def embed_bert_cls(text, model, tokenizer):
     embeddings = model_output.last_hidden_state[:, 0, :]
     embeddings = torch.nn.functional.normalize(embeddings)
     return embeddings[0].cpu().numpy()
-
-st.set_page_config(
-    page_title='Предсказание'
-    #layout="wide"
-)
 
 #Функция переводчик
 def trsl(text):
