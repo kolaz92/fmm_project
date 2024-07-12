@@ -9,6 +9,7 @@ from sklearn.metrics.pairwise import rbf_kernel
 from sentence_transformers import SentenceTransformer, util
 from tqdm import tqdm
 import streamlit as st
+from easygoogletranslate import EasyGoogleTranslate
 
 rb_tokenizer = AutoTokenizer.from_pretrained("cointegrated/rubert-tiny2")
 rb_model = AutoModel.from_pretrained("cointegrated/rubert-tiny2")
@@ -33,6 +34,22 @@ st.set_page_config(
     #layout="wide"
 )
 
+#Функция переводчик
+def trsl(text):
+    flag = True
+    translator = EasyGoogleTranslate(
+        source_language='ru',
+        target_language='en',
+        timeout=20
+    )
+    while flag:
+        try:
+            result = translator.translate(text)
+            flag = False
+        except Exception as e:
+            print(e)
+    return result
+
 # Функции для обработки текста
 def rubert(text,df):
     rubert_q = embed_bert_cls(text, rb_model, rb_tokenizer)
@@ -40,12 +57,16 @@ def rubert(text,df):
     return df
 
 def distbert_ms(text,df):
+    text = trsl(text)
     msdist_q = distmodel.encode(text)
     df['sim'] = df['emb_msdisbert'].apply(lambda x: cosine_similarity(msdist_q.reshape(1,-1), x.reshape(1,-1))[0][0])
     return df
 
 def display_image(url):
-    st.image(url, use_column_width=True)
+    try:
+        st.image(url, use_column_width=True)
+    except:
+        st.image('data/nope-not-here.webp', use_column_width=True)
 
 def show_films_ds(df_final,n):
     for index, row in df_final.sort_values(by=['sim'],ascending=False).head(n).iterrows():
