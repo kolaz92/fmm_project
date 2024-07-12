@@ -61,6 +61,7 @@ safetensors==0.4.3
 scikit-learn==1.5.1
 scipy==1.14.0
 sentencepiece==0.2.0
+sentence_transformers==3.0.1
 setuptools==69.5.1
 six==1.16.0
 smmap==5.0.1
