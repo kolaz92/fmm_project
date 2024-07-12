@@ -76,7 +76,7 @@ def show_films_ds(df_final,n):
         with cols[1]:
             st.write(f"**{row['movie_title']}**")
             st.write(row['description'])
-            st.write(f'Сходство: {row['sim']:.4f}')
+            st.write(f"Сходство: {row['sim']:.4f}")
 
 df_all = upload_and_transform()
 
