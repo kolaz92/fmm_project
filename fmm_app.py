@@ -3,18 +3,27 @@ from transformers import AutoTokenizer, AutoModel
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
-from scipy.spatial.distance import chebyshev, correlation
-from sklearn.metrics.pairwise import rbf_kernel
+# from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
+# from scipy.spatial.distance import chebyshev, correlation
+# from sklearn.metrics.pairwise import rbf_kernel
 from sentence_transformers import SentenceTransformer, util
 from tqdm import tqdm
 import streamlit as st
 from easygoogletranslate import EasyGoogleTranslate
 
-rb_tokenizer = AutoTokenizer.from_pretrained("cointegrated/rubert-tiny2")
-rb_model = AutoModel.from_pretrained("cointegrated/rubert-tiny2")
+# rb_tokenizer = AutoTokenizer.from_pretrained("cointegrated/rubert-tiny2")
+# rb_model = AutoModel.from_pretrained("cointegrated/rubert-tiny2")
 
-distmodel = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-v3', token='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')
+# distmodel = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-v3', token='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')
+
+@st.cache_resource
+def import_modules():
+    rb_tokenizer = AutoTokenizer.from_pretrained("cointegrated/rubert-tiny2")
+    rb_model = AutoModel.from_pretrained("cointegrated/rubert-tiny2")
+    distmodel = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-v3', token='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')
+    return rb_tokenizer, rb_model, distmodel
+
+rb_tokenizer, rb_model, distmodel = import_modules()    
 
 def upload_and_transform():
     combined = pd.read_csv('data/combined_parsing_with_embeddings.csv')
